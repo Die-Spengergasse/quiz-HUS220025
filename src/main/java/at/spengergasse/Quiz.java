@@ -23,33 +23,35 @@ public class Quiz
         EntityManager em = Persistence.createEntityManagerFactory("demo")
                 .createEntityManager();
         TypedQuery<Question> query = em.createQuery("SELECT q FROM Question q", Question.class);
-        List<Question> questions = query.getResultList();
+        this.questions = query.getResultList();
     }
 
-    public boolean showQaA()
+    public void start ()
     {
+        for (Question q : questions)
+        {
+            showQaA(q);
+        }
+        finish();
+    }
+    public void showQaA(Question q)
+    {
+        System.out.println("\n" + q.getText());
         List<Answer> answers = q.getAnswerList();
 
         for (int i = 0; i < answers.size(); i++)
         {
-            q = questions.get(i);
-            System.out.println(q.getText());
+
             Answer a = answers.get(i);
             System.out.println((i+1) + ") " + a.getText());
 
-            System.out.println("your answer: ");
-            int userAnswer = Integer.parseInt(sc.nextLine());
-            checkAnswer(q, userAnswer);
         }
 
+        System.out.println("your answer: ");
+        int userAnswer = Integer.parseInt(sc.nextLine());
+        checkAnswer(q, userAnswer );
 
-        if(nextQ < answers.size())
-        {
-            finish();
-            return false;
-        }
 
-        return true;
     }
 
     private void finish()
